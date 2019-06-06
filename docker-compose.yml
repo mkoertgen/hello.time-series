@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  influxdb:
+    # cf.: https://hub.docker.com/_/influxdb
+    image: influxdb:1.7.6-alpine
+    ports: ['8086:8086']
+    volumes:
+      - influxdb:/var/lib/influxdb/
+
+  chronograf:
+    # cf.: https://hub.docker.com/_/chronograf
+    image: chronograf:1.7.11-alpine
+    ports: ['8888:8888']
+    volumes:
+      - chronograf:/var/lib/chronograf/
+    depends_on: ['influxdb']
+    command: chronograf --influxdb-url=http://influxdb:8086
+
+  #telegraf:
+    # cf.: https://hub.docker.com/_/telegraf
+    #image: telegraf:1.9.5-alpine
+
+  grafana:
+    # cf.: 
+    # - https://hub.docker.com/r/grafana/grafana/tags
+    # - https://grafana.com/docs/installation/docker/#configuration
+    image: grafana/grafana:6.2.2
+    ports: ['3000:3000']
+    depends_on: ['influxdb']
+    environment: 
+      GF_SECURITY_ADMIN_PASSWORD: 123admin
+
+
+volumes:
+  influxdb: {}
+  chronograf: {}
+
+
