@@ -1,39 +1,88 @@
-version: '3'
+version: '3.7'
 
+x-base: &base
+  logging:
+    driver: "json-file"
+    options:
+      max-size: "3m"
+      max-file: "1"
+  # https://docs.docker.com/compose/compose-file/#restart
+  restart: ${DOCKER_RESTART:-unless-stopped}
+
+x-base-influx: &influx-base
+  <<: *base
+  image: influxdb:1.7.9-alpine  # cf.: https://hub.docker.com/_/influxdb
+
+x-base-kapacitor: &kapacitor-base
+  <<: *base
+  image: kapacitor:1.5.3-alpine
+    
 services:
-  influxdb:
-    # cf.: https://hub.docker.com/_/influxdb
-    image: influxdb:1.7.6-alpine
+  # full TICK-Stack, cf.: https://raw.githubusercontent.com/influxdata/TICK-docker/master/1.3/docker-compose.yml
+  influxdb: # cf.: https://hub.docker.com/_/influxdb
+    <<: *influx-base
     ports: ['8086:8086']
-    volumes:
-      - influxdb:/var/lib/influxdb/
-
-  chronograf:
-    # cf.: https://hub.docker.com/_/chronograf
-    image: chronograf:1.7.11-alpine
-    ports: ['8888:8888']
-    volumes:
-      - chronograf:/var/lib/chronograf/
+    volumes: [ 'influxdb:/var/lib/influxdb/' ]
+  influxdb-cli:
+    <<: *influx-base
+    image: influxdb:1.3.5
+    entrypoint: [ 'influx', '-host', 'influxdb' ]
     depends_on: ['influxdb']
-    command: chronograf --influxdb-url=http://influxdb:8086
+  
+  kapacitor:
+    <<: *kapacitor-base
+    environment:
+      KAPACITOR_HOSTNAME: kapacitor
+      KAPACITOR_INFLUXDB_0_URLS_0: http://influxdb:8086
+    depends_on: ['influxdb']
+    ports: ['9092:9092']
+  kapacitor-cli:
+    <<: *kapacitor-base
+    entrypoint: bash
+    environment:
+      KAPACITOR_URL: http://kapacitor:9092
+    depends_on: [ 'kapacitor' ]    
+  
+  chronograf: # cf.: https://hub.docker.com/_/chronograf
+    <<: *base
+    image: chronograf:1.7.14-alpine
+    ports: ['8888:8888']
+    volumes: [ 'chronograf:/var/lib/chronograf/' ]
+    depends_on: ['influxdb', 'kapacitor']
+    environment:
+      INFLUXDB_URL: http://influxdb:8086
+      KAPACITOR_URL: http://kapacitor:9092    
 
-  #telegraf:
-    # cf.: https://hub.docker.com/_/telegraf
-    #image: telegraf:1.9.5-alpine
+  telegraf: # cf.: https://hub.docker.com/_/telegraf
+    <<: *base
+    image: telegraf:1.13.0-alpine
+    # --- docker-compose only ---
+    volumes:
+      - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+    depends_on: ['influxdb']
+    ports:
+      - 8092:8092/udp
+      - 8094:8094
+      - 8125:8125/udp
+      - 8186:8186
+    # --- docker stack only ----
+    # configs:
+    #   - source: telegraf-conf
+    #     target: /etc/telegraf/telegraf.conf
 
-  grafana:
-    # cf.: 
-    # - https://hub.docker.com/r/grafana/grafana/tags
-    # - https://grafana.com/docs/installation/docker/#configuration
-    image: grafana/grafana:6.2.2
+  grafana: # https://hub.docker.com/r/grafana/grafana/tags
+    <<: *base
+    image: grafana/grafana:6.5.2
     ports: ['3000:3000']
     depends_on: ['influxdb']
-    environment: 
+    environment: # https://grafana.com/docs/installation/docker/#configuration
       GF_SECURITY_ADMIN_PASSWORD: 123admin
-
 
 volumes:
   influxdb: {}
   chronograf: {}
 
-
+# --- docker stack only ----
+# configs:
+#   telegraf-conf:
+#     file: ./telegraf/telegraf.conf
