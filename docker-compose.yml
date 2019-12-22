@@ -1,5 +1,6 @@
 version: '3.7'
 
+#---------------------------------------------------------------------------
 x-base: &base
   logging:
     driver: "json-file"
@@ -16,7 +17,8 @@ x-base-influx: &influx-base
 x-base-kapacitor: &kapacitor-base
   <<: *base
   image: kapacitor:1.5.3-alpine
-    
+
+#---------------------------------------------------------------------------
 services:
   # full TICK-Stack, cf.: https://raw.githubusercontent.com/influxdata/TICK-docker/master/1.3/docker-compose.yml
   influxdb: # cf.: https://hub.docker.com/_/influxdb
@@ -70,7 +72,9 @@ services:
     #   - source: telegraf-conf
     #     target: /etc/telegraf/telegraf.conf
 
+  #--- non TICK-Stack --------------------------------------
   grafana: # https://hub.docker.com/r/grafana/grafana/tags
+    # As of now, chronograf lacks in features behind grafana
     <<: *base
     image: grafana/grafana:6.5.2
     ports: ['3000:3000']

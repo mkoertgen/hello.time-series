@@ -1,0 +1,42 @@
+version: '3.7'
+
+#---------------------------------------------------------------------------
+x-base: &base
+  logging:
+    driver: "json-file"
+    options:
+      max-size: "3m"
+      max-file: "1"
+  # https://docs.docker.com/compose/compose-file/#restart
+  restart: ${DOCKER_RESTART:-unless-stopped}
+
+x-base-timescaledb: &timescaledb-base
+  # https://hub.docker.com/r/timescale/timescaledb/tags
+  # https://docs.timescale.com/latest/getting-started/installation/docker/installation-docker#postgis-docker
+  # https://docs.timescale.com/latest/getting-started/configuring
+  <<: *base
+  image: timescale/timescaledb:1.5.1-pg11-oss
+
+#---------------------------------------------------------------------------
+services:
+  timescaledb:
+    <<: *timescaledb-base
+    ports: ['5432:5432']
+    environment:
+      POSTGRES_PASSWORD: ${PG_PASSWORD}
+    volumes: [ 'timescaledb:/var/lib/postgresql/data' ]
+  timescaledb-cli:
+    <<: *timescaledb-base
+    entrypoint: ash
+    depends_on: ['timescaledb']
+  pgweb:
+    <<: *base
+    image: sosedoff/pgweb:0.11.5
+    ports: ['5433:8081']
+    depends_on: [ timescaledb ]
+    environment:
+      # https://github.com/sosedoff/pgweb/wiki/Docker#docker-compose
+      DATABASE_URL: postgres://postgres:${PG_PASSWORD}@timescaledb:5432/postgres?sslmode=disable
+  
+volumes:
+  timescaledb: {}
