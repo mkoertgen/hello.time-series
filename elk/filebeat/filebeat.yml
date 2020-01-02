@@ -1,0 +1,14 @@
+# https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-reference-yml.html
+filebeat.inputs:
+  - type: log
+    paths:
+      - ${path.logs}/*.ndjson
+    # activate json decoding
+    #json.message_key: message
+    #json.keys_under_root: false
+    json.add_error_key: true
+
+output.elasticsearch:
+  hosts: '${ELASTICSEARCH_HOSTS:elasticsearch:9200}'
+  username: '${ELASTICSEARCH_USERNAME:}'
+  password: '${ELASTICSEARCH_PASSWORD:}'

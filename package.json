@@ -1,0 +1,22 @@
+{
+  "name": "hello.tick-stack",
+  "version": "1.0.0",
+  "description": "Checking out the [TICK-Stack](https://www.influxdata.com/time-series-platform/), i.e.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mkoertgen/hello.tick-stack.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mkoertgen/hello.tick-stack/issues"
+  },
+  "homepage": "https://github.com/mkoertgen/hello.tick-stack#readme",
+  "devDependencies": {
+    "csv2json": "^2.0.2"
+  }
+}
