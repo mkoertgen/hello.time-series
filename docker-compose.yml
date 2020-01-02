@@ -60,7 +60,7 @@ services:
     image: telegraf:1.13.0-alpine
     # --- docker-compose only ---
     volumes:
-      - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+      - ./tick/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
     depends_on: ['influxdb']
     ports:
       - 8092:8092/udp
@@ -89,4 +89,4 @@ volumes:
 # --- docker stack only ----
 # configs:
 #   telegraf-conf:
-#     file: ./telegraf/telegraf.conf
+#     file: ./tick/telegraf/telegraf.conf
