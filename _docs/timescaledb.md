@@ -1,9 +1,6 @@
 # TimeScaleDB
 
-- [timescale/timescaledb](https://github.com/timescale/timescaledb)
-- [TimescaleDB vs. InfluxDB: Purpose built differently for time-series data](https://blog.timescale.com/blog/timescaledb-vs-influxdb-for-time-series-data-timescale-influx-sql-nosql-36489299877/)
-- [Building a scalable time-series database using Postgres](https://www.percona.com/live/17/sites/default/files/slides/timescale-percona-Apr-2017.pdf)
-- [Benchmarking TimescaleDB vs. InfluxDB for Time-Series Data](https://www.outfluxdata.com/assets/Timescale_WhitePaper_Benchmarking_Influx.pdf)
+PoC on TimeScaleDb
 
 ## Setup
 
@@ -61,3 +58,18 @@ And check [localhost:5433](http://localhost:5433)
 ### From InfluxDB
 
 - [Migration from InfluxDB to TimescaleDB using Outflux](https://docs.timescale.com/latest/getting-started/migrating-data#outflux)
+
+## References
+
+- [blog.timescale.com](https://blog.timescale.com/blog/)
+- [timescale/timescaledb](https://github.com/timescale/timescaledb)
+- [timescale/tsbs](https://github.com/timescale/tsbs) - Time Series Benchmark Suite, a tool for comparing and evaluating databases for time series data
+- [TimescaleDB vs. InfluxDB: Purpose built differently for time-series data](https://blog.timescale.com/blog/timescaledb-vs-influxdb-for-time-series-data-timescale-influx-sql-nosql-36489299877/)
+- [Building a scalable time-series database using Postgres](https://www.percona.com/live/17/sites/default/files/slides/timescale-percona-Apr-2017.pdf)
+- [Benchmarking TimescaleDB vs. InfluxDB for Time-Series Data](https://www.outfluxdata.com/assets/Timescale_WhitePaper_Benchmarking_Influx.pdf)
+- [Time-series data: Why (and how) to use a relational database instead of NoSQL](https://blog.timescale.com/blog/time-series-data-why-and-how-to-use-a-relational-database-instead-of-nosql-d0cd6975e87c/)
+
+### .NET
+
+- [Timeseries Databases Part 3: Writing Data to TimescaleDB from .NET](https://bytefish.de/blog/timeseries_databases_3_timescaledb/)
+- [bytefish/GermanWeatherDataExample](https://github.com/bytefish/GermanWeatherDataExample)
