@@ -4,5 +4,25 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Migrations\20200103175241_initial.cs" />
+    <Compile Remove="Migrations\20200103175241_initial.Designer.cs" />
+    <Compile Remove="Migrations\20200103175335_Initial.cs" />
+    <Compile Remove="Migrations\20200103175335_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20200103180227_Initial.cs" />
+    <Compile Remove="Migrations\20200103180227_Initial.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CsvHelper" Version="12.2.3" />
+    <PackageReference Include="EFCore.NamingConventions" Version="1.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="3.1.0" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.0" />
+  </ItemGroup>
+
 
 </Project>

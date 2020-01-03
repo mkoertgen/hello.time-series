@@ -45,6 +45,9 @@ services:
       context: ./dotnet
     depends_on: [ timescaledb ]
     ports: ['8080:80']
+    environment:
+      # cf.: https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/?view=aspnetcore-2.2#environment-variables-configuration-provider
+      CUSTOMCONNSTR_WEATHERCONTEXT: "User ID =postgres;Password=${PG_PASSWORD};Server=timescaledb;Port=5432;Database=weatherDb;Integrated Security=true;Pooling=true;"
   
 volumes:
   timescaledb: {}

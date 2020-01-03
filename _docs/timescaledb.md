@@ -71,5 +71,7 @@ And check [localhost:5433](http://localhost:5433)
 
 ### .NET
 
+- [Entity Framework Core / Npgsql](https://www.npgsql.org/efcore/)
+- [ASP.NET Core, Entity Framework Core with PostgreSQL Code First](https://medium.com/faun/asp-net-core-entity-framework-core-with-postgresql-code-first-d99b909796d7)
 - [Timeseries Databases Part 3: Writing Data to TimescaleDB from .NET](https://bytefish.de/blog/timeseries_databases_3_timescaledb/)
 - [bytefish/GermanWeatherDataExample](https://github.com/bytefish/GermanWeatherDataExample)
