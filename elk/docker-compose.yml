@@ -35,6 +35,6 @@ services:
       ELASTICSEARCH_HOSTS: ${ELASTICSEARCH_HOSTS:-elasticsearch:9200}
       KIBANA_HOST: ${KIBANA_HOST:-kibana:5601}
     volumes:
-      - ./elk/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
-      - ./elk/filebeat/logs/:/usr/share/filebeat/logs/:ro
+      - ./filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - ./filebeat/logs/:/usr/share/filebeat/logs/:ro
   

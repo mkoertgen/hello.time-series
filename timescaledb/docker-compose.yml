@@ -37,6 +37,14 @@ services:
     environment:
       # https://github.com/sosedoff/pgweb/wiki/Docker#docker-compose
       DATABASE_URL: postgres://postgres:${PG_PASSWORD}@timescaledb:5432/postgres?sslmode=disable
+
+#---------------------------------------------------------------------------
+  dotnet:
+    <<: *base
+    build:
+      context: ./dotnet
+    depends_on: [ timescaledb ]
+    ports: ['8080:80']
   
 volumes:
   timescaledb: {}
