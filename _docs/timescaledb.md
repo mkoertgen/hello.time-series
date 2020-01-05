@@ -52,6 +52,19 @@ And check [localhost:5433](http://localhost:5433)
 
 ### CSV Import
 
+Download CSV sample data from
+
+- [Sample Datasets](https://docs.timescale.com/latest/tutorials/other-sample-datasets)
+
+and upload posting to `/conditions/upload`, e.g.
+
+```console
+$curl -X POST http://localhost:5000/conditions/upload --data-binary @weather_small_conditions.csv
+1000000
+```
+
+See also
+
 - [Inserting data into the hypertable](https://docs.timescale.com/latest/getting-started/migrating-data#csv-import)
 - [timescale/timescaledb-parallel-copy](https://github.com/timescale/timescaledb-parallel-copy)
 
