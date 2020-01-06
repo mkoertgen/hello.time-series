@@ -24,17 +24,15 @@ def generate(host, port, username, password, topic, sensors, interval_ms, verbos
     while True:
         sensor_id = random.choice(keys)
         sensor = sensors[sensor_id]
-        min_val, max_val = sensor.get("range", [0, 100])
-        val = random.randint(min_val, max_val)
 
-        data = {
-            "id": sensor_id,
-            "value": val
-        }
+        data = {"id": sensor_id}
+        for val_def in sensor.get('values', []):
+            min_val, max_val = val_def.get("range", [0, 100])
+            val = random.uniform(min_val, max_val)
+            data[val_def['name']] = val
 
-        for key in ["lat", "lng", "unit", "type", "description"]:
+        for key in ["lat", "lon"]:
             value = sensor.get(key)
-
             if value is not None:
                 data[key] = value
 

@@ -11,45 +11,31 @@
     "verbose": true
   },
   "sensors": {
-    "Sensor 1": {
-      "lat": 10,
-      "lng": 10,
-      "unit": "C",
-      "type": "temperature",
-      "range": [0, 45],
-      "description": "Main Entrance"
+    "weather-pro-002000": {
+      "lat": 52,
+      "lon": 8,
+      "values": [{
+          "name": "temperature",
+          "range": [0, 45]
+        },
+        {
+          "name": "humidity",
+          "range": [0, 100]
+        }
+      ]
     },
-    "Sensor 2": {
-      "lat": 90,
-      "lng": 90,
-      "unit": "C",
-      "type": "temperature",
-      "range": [0, 45],
-      "description": "Kitchen"
-    },
-    "Sensor 3": {
-      "lat": 90,
-      "lng": 10,
-      "unit": "C",
-      "type": "temperature",
-      "range": [0, 45],
-      "description": "Deposit"
-    },
-    "Sensor 4": {
-      "lat": 10,
-      "lng": 90,
-      "unit": "C",
-      "type": "temperature",
-      "range": [0, 45],
-      "description": "Assembly Floor"
-    },
-    "Sensor 5": {
-      "lat": 50,
-      "lng": 50,
-      "unit": "C",
-      "type": "temperature",
-      "range": [0, 45],
-      "description": "Offices"
+    "weather-pro-002001": {
+      "lat": 51,
+      "lon": 7,
+      "values": [{
+          "name": "temperature",
+          "range": [0, 45]
+        },
+        {
+          "name": "humidity",
+          "range": [0, 100]
+        }
+      ]
     }
   }
 }
