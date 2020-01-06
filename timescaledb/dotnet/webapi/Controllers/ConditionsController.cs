@@ -31,7 +31,7 @@ namespace webapi.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Condition> Get(string from = "now-15m", string to = "now", int size = 10, int page = 0)
+        public IEnumerable<Condition> Get(string from = "now-15m", string to = "now", int size = 10, int page = 0, string deviceId=null)
         {
             try
             {
@@ -41,6 +41,7 @@ namespace webapi.Controllers
                     throw new ArgumentException("Could not parse date math expression", nameof(to));
                 return _context.Conditions
                     .Where(c => fromTime < c.Time && c.Time <= toTime)
+                    .Where(c => string.IsNullOrWhiteSpace(deviceId) || c.DeviceId == deviceId)
                     .OrderByDescending(c => c.Time)
                     .Skip(page * size)
                     .Take(size);

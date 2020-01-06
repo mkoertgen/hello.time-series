@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """a simple sensor data generator that sends to an MQTT broker via paho"""
-import os
-import sys
+from datetime import datetime, timezone
 import json
-import time
+import os
 import random
+import sys
+import time
 
 import paho.mqtt.client as mqtt
 
@@ -12,10 +13,8 @@ import paho.mqtt.client as mqtt
 def generate(host, port, username, password, topic, sensors, interval_ms, verbose):
     """generate data and send it to an MQTT broker"""
     mqttc = mqtt.Client()
-
     if username:
         mqttc.username_pw_set(username, password)
-
     mqttc.connect(host, port)
 
     keys = list(sensors.keys())
@@ -25,7 +24,8 @@ def generate(host, port, username, password, topic, sensors, interval_ms, verbos
         sensor_id = random.choice(keys)
         sensor = sensors[sensor_id]
 
-        data = {"id": sensor_id}
+        data = {'id': sensor_id, 'time': datetime.utcnow().isoformat()}
+
         for val_def in sensor.get('values', []):
             min_val, max_val = val_def.get("range", [0, 100])
             val = random.uniform(min_val, max_val)

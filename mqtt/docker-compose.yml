@@ -1,5 +1,11 @@
 version: '3.7'
 
+# https://docs.docker.com/compose/networking/#use-a-pre-existing-network
+networks:
+  timescaledb:
+    external:
+      name: timescaledb_default
+
 #---------------------------------------------------------------------------
 x-base: &base
   logging:
@@ -10,6 +16,12 @@ x-base: &base
   # https://docs.docker.com/compose/compose-file/#restart
   restart: ${DOCKER_RESTART:-unless-stopped}
 
+x-mqtt-env: &mqtt_env
+  MQTT_HOST: ${MQTT_HOST}
+  MQTT_USERNAME: ${MQTT_USERNAME}
+  MQTT_PASSWORD: ${MQTT_PASSWORD}
+  MQTT_TOPIC: ${MQTT_TOPIC}
+
 #---------------------------------------------------------------------------
 services:
   simulator:
@@ -17,19 +29,28 @@ services:
     build:
       context: ./simulator
     environment:
-      MQTT_HOST: ${MQTT_HOST}
-      MQTT_USERNAME: ${MQTT_USERNAME}
-      MQTT_PASSWORD: ${MQTT_PASSWORD}
-      MQTT_TOPIC: ${MQTT_TOPIC}
+      <<: *mqtt_env
       MQTT_INTERVAL_MS: ${MQTT_INTERVAL_MS}
     depends_on: [ "${MQTT_HOST}" ]
 
+  mqtt-to-timescaledb:
+    <<: *base
+    build:
+      context: ./mqtt-to-timescaledb
+    environment:
+      <<: *mqtt_env
+      PGHOST: ${PGHOST}
+    depends_on: [ "${MQTT_HOST}" ]
+    networks:
+      - default
+      - timescaledb
+  
+  #--- MQTT brokers (choose one -> `.env`-file)
   mosquitto: # preferred, bc. very lightweight
     <<: *base
     image: eclipse-mosquitto:1.6.8
     ports: [ '1883:1883' ]
   
-
   rabbitmq: # preferred mqtt broker, bc. very interoperabel (polyglot broker translates well to message protocols)
     <<: *base
     image: rabbitmq:3.8.2-management-alpine
