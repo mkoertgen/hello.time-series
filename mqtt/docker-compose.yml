@@ -5,7 +5,10 @@ networks:
   timescaledb:
     external:
       name: timescaledb_default
-
+  tick:
+    external:
+      name: tick_default
+    
 #---------------------------------------------------------------------------
 x-base: &base
   logging:
@@ -44,7 +47,19 @@ services:
     networks:
       - default
       - timescaledb
-  
+
+  mqtt-to-influxdb:
+    <<: *base
+    build:
+      context: ./mqtt-to-influxdb
+    environment:
+      <<: *mqtt_env
+      PGHOST: ${PGHOST}
+    depends_on: [ "${MQTT_HOST}" ]
+    networks:
+      - default
+      - tick
+          
   #--- MQTT brokers (choose one -> `.env`-file)
   mosquitto: # preferred, bc. very lightweight
     <<: *base

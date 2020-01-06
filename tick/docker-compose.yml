@@ -1,5 +1,11 @@
 version: '3.7'
 
+# https://docs.docker.com/compose/networking/#use-a-pre-existing-network
+networks:
+  mqtt:
+    external:
+      name: mqtt_default
+
 #---------------------------------------------------------------------------
 x-base: &base
   logging:
@@ -9,6 +15,7 @@ x-base: &base
       max-file: "1"
   # https://docs.docker.com/compose/compose-file/#restart
   restart: ${DOCKER_RESTART:-unless-stopped}
+  #networks: [ 'hello-tick-stack' ]
 
 x-base-influx: &influx-base
   <<: *base
@@ -58,15 +65,18 @@ services:
   telegraf: # cf.: https://hub.docker.com/_/telegraf
     <<: *base
     image: telegraf:1.13.0-alpine
-    # --- docker-compose only ---
-    volumes:
-      - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
     depends_on: ['influxdb']
     ports:
       - 8092:8092/udp
       - 8094:8094
       - 8125:8125/udp
       - 8186:8186
+    networks:
+      - default
+      - mqtt
+    # --- docker-compose only ---
+    volumes:
+      - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
     # --- docker stack only ----
     # configs:
     #   - source: telegraf-conf
