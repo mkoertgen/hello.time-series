@@ -8,6 +8,7 @@ Alternatives / Enhancements to TICK/InfluxDB
 - [Grafana](grafana)
 - [ELK Stack](elk-stack)
 - [Kafka](kafka)
+- [CrateDB](cratedb)
 
 ## References
 
