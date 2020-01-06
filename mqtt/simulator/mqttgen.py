@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 """a simple sensor data generator that sends to an MQTT broker via paho"""
+import os
 import sys
 import json
 import time
 import random
 
 import paho.mqtt.client as mqtt
+
 
 def generate(host, port, username, password, topic, sensors, interval_ms, verbose):
     """generate data and send it to an MQTT broker"""
@@ -61,15 +63,17 @@ def main(config_path):
                 print("no sensors specified in config, nothing to do")
                 return
 
-            host = mqtt_config.get("host", "localhost")
+            host = mqtt_config.get("host", os.getenv('MQTT_HOST', 'localhost'))
             port = mqtt_config.get("port", 1883)
-            username = mqtt_config.get("username")
-            password = mqtt_config.get("password")
+            username = mqtt_config.get("username", os.getenv('MQTT_USER'))
+            password = mqtt_config.get("password", os.getenv('MQTT_PASS'))
             topic = mqtt_config.get("topic", "mqttgen")
 
-            generate(host, port, username, password, topic, sensors, interval_ms, verbose)
+            generate(host, port, username, password,
+                     topic, sensors, interval_ms, verbose)
     except IOError as error:
         print("Error opening config file '%s'" % config_path, error)
+
 
 if __name__ == '__main__':
     if len(sys.argv) == 2:

@@ -12,12 +12,33 @@ x-base: &base
 
 #---------------------------------------------------------------------------
 services:
-  mosquitto:
-    <<: *base
-    image: eclipse-mosquitto:1.6.8
-  
   simulator:
     <<: *base
     build:
       context: ./simulator
-    depends_on: ['mosquitto']
+    environment:
+      MQTT_HOST: ${MQTT_HOST}
+      MQTT_USER: ${MQTT_USER}
+      MQTT_PASS: ${MQTT_PASS}
+    depends_on: [ "${MQTT_HOST}" ]
+
+  mosquitto: # preferred, bc. very lightweight
+    <<: *base
+    image: eclipse-mosquitto:1.6.8
+    ports: [ '1883:1883' ]
+  
+
+  rabbitmq: # preferred mqtt broker, bc. very interoperabel (polyglot broker translates well to message protocols)
+    <<: *base
+    image: rabbitmq:3.8.2-management-alpine
+    ports: 
+      - 5672:5672   # rabbitmq tcp listener
+      - 15672:15672 # rabbitmq ui
+      - 1883:1883   # rabbitmq mqtt broker
+      - 15675:15675 # rabbitmq web mqtt
+      # more? e.g. STOMP, ...
+    volumes:
+      - ./rabbitmq/conf/enabled_plugins:/etc/rabbitmq/enabled_plugins
+    environment:
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
