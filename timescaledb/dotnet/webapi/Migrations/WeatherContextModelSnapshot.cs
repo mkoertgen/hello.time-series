@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+using NpgsqlTypes;
 using webapi.Models;
 
 namespace webapi.Migrations
@@ -32,6 +33,10 @@ namespace webapi.Migrations
                     b.Property<double?>("Humidity")
                         .HasColumnName("humidity")
                         .HasColumnType("double precision");
+
+                    b.Property<NpgsqlPoint?>("Location")
+                        .HasColumnName("location")
+                        .HasColumnType("point");
 
                     b.Property<double?>("Temperature")
                         .HasColumnName("temperature")

@@ -1,5 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Query.Internal;
+using NpgsqlTypes;
 
 namespace webapi.Models
 {
@@ -16,5 +18,6 @@ namespace webapi.Models
         public string DeviceId { get; set; }
         public double? Temperature { get; set; } // Fahrenheit
         public double? Humidity { get; set; }
+        public NpgsqlPoint? Location { get; set; }
     }
 }

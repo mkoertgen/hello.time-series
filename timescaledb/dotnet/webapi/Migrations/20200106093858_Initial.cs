@@ -1,5 +1,6 @@
 using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using NpgsqlTypes;
 using webapi.Models;
 
 namespace webapi.Migrations
@@ -15,7 +16,8 @@ namespace webapi.Migrations
                     time = table.Column<DateTimeOffset>(nullable: false),
                     device_id = table.Column<string>(nullable: false),
                     temperature = table.Column<double>(nullable: true),
-                    humidity = table.Column<double>(nullable: true)
+                    humidity = table.Column<double>(nullable: true),
+                    location = table.Column<NpgsqlPoint>(nullable: true)
                 },
                 constraints: table =>
                 {

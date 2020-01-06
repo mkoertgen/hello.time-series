@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Npgsql;
+using NpgsqlTypes;
 using PostgreSQLCopyHelper;
 using webapi.Models;
 
@@ -55,33 +56,51 @@ namespace webapi.Controllers
         [DisableRequestSizeLimit]
         public async Task<IActionResult> Upload()
         {
-            _logger.LogInformation("Reading request body...");
             // cf.: https://weblog.west-wind.com/posts/2017/sep/14/accepting-raw-request-body-content-in-aspnet-core-api-controllers
             using var reader = new StreamReader(Request.Body);
             var content = await reader.ReadToEndAsync();
+            _logger.LogDebug("Read request body");
+
             using var textReader = new StringReader(content);
             var config = new Configuration(CultureInfo.InvariantCulture)
             {
                 HasHeaderRecord = false,
-                Delimiter = ","
+                Delimiter = ",",
+                MissingFieldFound = null // ignore missing fields
             };
             using var csv = new CsvReader(textReader, config);
-            _logger.LogInformation("Parsing CSV records...");
             var conditions = csv.GetRecords<Condition>();
+            _logger.LogDebug("Parsed CSV records");
 
 
-            _logger.LogInformation("Bulk insert...");
             // bulk insert for Npgsql, cf.: https://github.com/PostgreSQLCopyHelper/PostgreSQLCopyHelper
             var copyHelper = new PostgreSQLCopyHelper<Condition>("conditions")
                 .MapTimeStampTz("time", x => x.Time)
                 .MapCharacter("device_id", x => x.DeviceId)
-                .MapDouble("temperature", x => x.Temperature)
-                .MapDouble("humidity", x => x.Humidity);
+                .MapDouble("temperature", x => ToCelsius(x.Temperature))
+                .MapDouble("humidity", x => x.Humidity)
+                .MapNullable("location", x => PointOrRandomLatLong(x.Location), NpgsqlDbType.Point)
+                ;
             await using var connection = new NpgsqlConnection(_context.Database.GetDbConnection().ConnectionString);
             connection.Open();
             var count = await copyHelper.SaveAllAsync(connection, conditions);
+            _logger.LogDebug($"Bulk-inserted ${count} records");
 
             return Ok(count);
         }
+
+        private static double? ToCelsius(double? fahrenheit)
+        {
+            return (fahrenheit - 32.0) /1.8;
+        }
+
+        private static NpgsqlPoint? PointOrRandomLatLong(NpgsqlPoint? point)
+        {
+            if (point.HasValue) return point.Value;
+            var lon = Rnd.NextDouble() * 360.0 - 180.0;
+            var lat = Rnd.NextDouble() * 180.0 - 90.0;
+            return new NpgsqlPoint(lon, lat);
+        }
+        private static readonly  Random Rnd = new Random();
     }
 }

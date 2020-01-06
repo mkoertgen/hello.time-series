@@ -5,12 +5,13 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+using NpgsqlTypes;
 using webapi.Models;
 
 namespace webapi.Migrations
 {
     [DbContext(typeof(WeatherContext))]
-    [Migration("20200105174551_Initial")]
+    [Migration("20200106093858_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,6 +35,10 @@ namespace webapi.Migrations
                     b.Property<double?>("Humidity")
                         .HasColumnName("humidity")
                         .HasColumnType("double precision");
+
+                    b.Property<NpgsqlPoint?>("Location")
+                        .HasColumnName("location")
+                        .HasColumnType("point");
 
                     b.Property<double?>("Temperature")
                         .HasColumnName("temperature")
