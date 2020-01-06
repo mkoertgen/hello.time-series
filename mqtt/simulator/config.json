@@ -1,7 +1,10 @@
 {
   "mqtt": {
+    "host": "localhost",
     "port": 1883,
-    "topic": "sensors"
+    "topic": "sensors",
+    "username": "mqtt-user",
+    "password": "mqtt-password"
   },
   "misc": {
     "interval_ms": 1000,

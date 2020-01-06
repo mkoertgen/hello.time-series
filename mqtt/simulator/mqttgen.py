@@ -47,6 +47,12 @@ def generate(host, port, username, password, topic, sensors, interval_ms, verbos
         time.sleep(interval_secs)
 
 
+def get_config(config, key: str, default_value=None):
+    env_key = f'MQTT_{key.upper()}'
+    val = os.getenv(env_key, config.get(key, default_value))
+    return val
+
+
 def main(config_path):
     """main entry point, load and validate config and call generate"""
     try:
@@ -56,18 +62,18 @@ def main(config_path):
             misc_config = config.get("misc", {})
             sensors = config.get("sensors")
 
-            interval_ms = misc_config.get("interval_ms", 500)
+            interval_ms = int(get_config(misc_config, 'interval_ms', '500'))
             verbose = misc_config.get("verbose", False)
 
             if not sensors:
                 print("no sensors specified in config, nothing to do")
                 return
 
-            host = mqtt_config.get("host", os.getenv('MQTT_HOST', 'localhost'))
+            host = get_config(mqtt_config, 'host', 'localhost')
             port = mqtt_config.get("port", 1883)
-            username = mqtt_config.get("username", os.getenv('MQTT_USER'))
-            password = mqtt_config.get("password", os.getenv('MQTT_PASS'))
-            topic = mqtt_config.get("topic", "mqttgen")
+            username = get_config(mqtt_config, 'username')
+            password = get_config(mqtt_config, 'password')
+            topic = get_config(mqtt_config, 'topic', 'mqttgen')
 
             generate(host, port, username, password,
                      topic, sensors, interval_ms, verbose)

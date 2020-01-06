@@ -18,8 +18,10 @@ services:
       context: ./simulator
     environment:
       MQTT_HOST: ${MQTT_HOST}
-      MQTT_USER: ${MQTT_USER}
-      MQTT_PASS: ${MQTT_PASS}
+      MQTT_USERNAME: ${MQTT_USERNAME}
+      MQTT_PASSWORD: ${MQTT_PASSWORD}
+      MQTT_TOPIC: ${MQTT_TOPIC}
+      MQTT_INTERVAL_MS: ${MQTT_INTERVAL_MS}
     depends_on: [ "${MQTT_HOST}" ]
 
   mosquitto: # preferred, bc. very lightweight
