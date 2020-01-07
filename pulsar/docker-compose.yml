@@ -1,0 +1,46 @@
+version: '3.7'
+
+x-base: &base
+  logging:
+    driver: "json-file"
+    options:
+      max-size: "3m"
+      max-file: "1"
+  # https://docs.docker.com/compose/compose-file/#restart
+  restart: ${DOCKER_RESTART:-unless-stopped}
+
+volumes:
+  pulsar_data: {}
+
+x-python-client: &python-client
+  <<: *base
+  # https://pulsar.apache.org/docs/en/standalone-docker/#consume-a-message
+  build:
+    context: ./python-client
+  environment:
+    PULSAR_HOST: pulsar
+    PULSAR_TOPIC: conditions
+  
+services:
+  pulsar:
+    <<: *base
+    # cf.: https://pulsar.apache.org/docs/en/standalone-docker/#start-pulsar-in-docker
+    image: apachepulsar/pulsar:2.4.2
+    ports: ['6650:6650', '8080:8080']
+    volumes: [ 'pulsar_data:/pulsar/data' ]
+    command: bin/pulsar standalone
+
+  python-producer:
+    <<: *python-client
+    command: python3.5 producer.py
+
+  python-consumer:
+    <<: *python-client
+    command: python3.5 consumer.py
+
+  # TODO: pulsar ui, cf.: 
+  # - https://github.com/apache/pulsar-manager
+  # - https://medium.com/streamnative/how-to-use-apache-pulsar-manager-with-herddb-dd265c955ca4
+  # pulsar-manager:
+  #   <<: *base
+  #   image: apachepulsar/pulsar-manager:v0.1.0

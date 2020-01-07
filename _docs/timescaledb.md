@@ -7,7 +7,8 @@ PoC on TimeScaleDb
 Setup a timescaledb instance
 
 ```bash
-$docker-compose -f docker-compose.timescaledb.yml run --rm timescaledb-cli
+$cd timescaledb
+$docker-compose run --rm timescaledb-cli
 Starting hellotick-stack_timescaledb_1 ... done
 
 # Connect

@@ -7,7 +7,7 @@ Alternatives / Enhancements to TICK/InfluxDB
 - [TimeScaleDB](timescaledb)
 - [Grafana](grafana)
 - [ELK Stack](elk-stack)
-- [Kafka](kafka)
+- Event Streaming: [Kafka](kafka), [Pulsar](pulsar)
 - [CrateDB](cratedb)
 
 ## References

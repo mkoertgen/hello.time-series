@@ -5,7 +5,8 @@
 Start the stack using
 
 ```console
-docker-compose -f docker-compose.elk.yml up -d
+cd elk
+docker-compose up -d
 ```
 
 Next, check Kibana at [localhost:5601](http://localhost:5601)

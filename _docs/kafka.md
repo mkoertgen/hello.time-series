@@ -5,7 +5,8 @@
 Start the stack using
 
 ```console
-docker-compose -f docker-compose.kafka.yml up -d kafka
+cd kafka
+docker-compose up -d kafka
 ```
 
 Next, check your local Kafka Cluster at [localhost:3030](http://localhost:3030)
