@@ -34,6 +34,16 @@ Finally, check the topic stats via the Pulsar Admin REST Api at [admin/v2/persis
   ...
 ```
 
+## Notes
+
+### Python
+
+Since [pulsar-client](https://pypi.org/project/pulsar-client/) uses [manylinux](https://github.com/pypa/manylinux) for native dependencies (e.g. [fastavro](https://pypi.org/project/fastavro/)) you can use the python client only on linux compatible to glibc2.5. This rules out Windows, Mac, and [Alpine Linux](https://alpinelinux.org/) ([musl-libc](https://www.musl-libc.org/)).
+
+As of now, the most recent Python to use is 3.7. You may check at [pulsar-client/#files](https://pypi.org/project/pulsar-client/#files) for updates.
+
+So basically, we are using [python:3.7.6-slim-buster](https://hub.docker.com/layers/python/library/python/3.7.6-slim-buster/images/sha256-47cabc28176273541f261c4efd2a5d4d02262025f05ca0ed5df3680552f1c1bb) as a base image.
+
 ## References
 
 - [pulsar.apache.org](https://pulsar.apache.org/)

@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from datetime import datetime
 import json
 import os
@@ -12,7 +13,7 @@ PULSAR_HOST = os.getenv('PULSAR_HOST', 'localhost')
 PULSAR_TOPIC = os.getenv('PULSAR_TOPIC', 'my-topic')
 PULSAR_INTERVAL_MS = int(os.getenv('PULSAR_INTERVAL_MS', '0'))
 
-client = pulsar.Client('pulsar://{}:6650'.format(PULSAR_HOST))
+client = pulsar.Client(f'pulsar://{PULSAR_HOST}:6650')
 producer = client.create_producer(
     topic=PULSAR_TOPIC, schema=AvroSchema(Condition))
 

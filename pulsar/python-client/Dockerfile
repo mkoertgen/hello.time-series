@@ -1,4 +1,7 @@
-FROM apachepulsar/pulsar:2.4.2
+ARG BASE_IMAGE=python:3.7.1-alpine3.11
+FROM ${BASE_IMAGE}
 WORKDIR /usr/src/app
+COPY requirements.txt ./
+RUN pip install -r requirements.txt
 COPY . .
-CMD ["python3.5", "consumer.py"]
+CMD ["python", "consumer.py"]

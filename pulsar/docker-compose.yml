@@ -17,6 +17,21 @@ x-python-client: &python-client
   # https://pulsar.apache.org/docs/en/standalone-docker/#consume-a-message
   build:
     context: ./python-client
+    #dockerfile: pulsar.Dockerfile
+    args:
+      #BASE_IMAGE: python:3.8.1-alpine3.11
+      #BASE_IMAGE: apachepulsar/pulsar:2.4.2
+      #BASE_IMAGE: python:3.8.1-slim-buster
+      BASE_IMAGE: python:3.7.6-slim-buster
+  environment:
+    PULSAR_HOST: pulsar
+    PULSAR_TOPIC: conditions
+
+x-java-client: &java-client
+  <<: *base
+  # https://pulsar.apache.org/docs/en/client-libraries/#java-client
+  build:
+    context: ./java-client
   environment:
     PULSAR_HOST: pulsar
     PULSAR_TOPIC: conditions
@@ -32,11 +47,11 @@ services:
 
   python-producer:
     <<: *python-client
-    command: python3.5 producer.py
+    command: python3 producer.py
 
   python-consumer:
     <<: *python-client
-    command: python3.5 consumer.py
+    command: python3 consumer.py
 
   # TODO: pulsar ui, cf.: 
   # - https://github.com/apache/pulsar-manager
