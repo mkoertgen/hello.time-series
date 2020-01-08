@@ -6,21 +6,24 @@ package com.examples.hello.pulsar;
 import org.apache.pulsar.client.api.PulsarClient;
 import org.apache.pulsar.client.api.PulsarClientException;
 import org.apache.pulsar.client.impl.schema.AvroSchema;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.Instant;
 import java.util.Optional;
 import java.util.Random;
 
 public class App {
+    private static final Logger logger = LoggerFactory.getLogger(App.class);
+
     public static void main(String[] args) throws PulsarClientException, InterruptedException {
       var client = createClient(getProp("PULSAR_HOST", "localhost"));
       var topic = getProp("PULSAR_TOPIC", "conditions");
-      var isConsumer = Boolean.parseBoolean(getProp("PULSAR_PRODUCER", "false"));
-
-      if (isConsumer)
-        consume(client, topic);
-      else
+      var isProducer = Boolean.parseBoolean(getProp("PULSAR_PRODUCER", "false"));
+      if (isProducer)
         produce(client, topic);
+      else
+        consume(client, topic);
       client.close();
     }
 
@@ -39,10 +42,11 @@ public class App {
           var id = msg.getMessageId();
           var t = condition.getTemperature();
           var h = condition.getHumidity();
-          System.out.printf("Received msg(time=%s id=%s), condition(T=%.2f H=%.2f)", ts, id, t, h);
+          logger.info("Received msg(time={} id={}), condition(T={} H={})", ts, id, t, h);
 
           consumer.acknowledge(msg);
         } catch (Exception e) {
+          logger.error("Could not receive message", e);
           consumer.negativeAcknowledge(msg);
         }
       }
@@ -56,9 +60,12 @@ public class App {
       var rnd = new Random();
       var sleepMs = Integer.parseInt(getProp("PULSAR_INTERVAL_MS", "0"));
       while (true) {
-        condition.setTemperature(rnd.nextFloat() * 40);
-        condition.setHumidity(rnd.nextFloat() * 100);
+        var t = rnd.nextFloat() * 40;
+        var h = rnd.nextFloat() * 100;
+        condition.setTemperature(t);
+        condition.setHumidity(h);
         producer.send(condition);
+        logger.info("Sent condition(T={} H={})", t, h);
         if (sleepMs > 0)
           Thread.sleep(sleepMs);
       }

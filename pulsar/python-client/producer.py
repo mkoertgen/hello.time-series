@@ -22,11 +22,11 @@ def generate():
 
     while True:
         sensor_id = random.choice(keys)
-        model = Condition(
-            temperature=random.uniform(0, 40),
-            humidity=random.uniform(0, 100)
-        )
+        t = random.uniform(0, 40)
+        h = random.uniform(0, 100)
+        model = Condition(temperature=t, humidity=h)
         producer.send(model)
+        print(f'Sent condition(T={t:.2f} H={h:.2f})')
         if interval_secs > 0:
             time.sleep(interval_secs)
 
