@@ -23,6 +23,7 @@ python-consumer_1  | Received condition: time=2020-01-07T21:49:19.093253 id=sens
 Finally, check the topic stats via the Pulsar Admin REST Api at [admin/v2/persistent/public/default/conditions/stats](http://localhost:8080/admin/v2/persistent/public/default/conditions/stats)
 
 ```json
+GET http://localhost:8080/admin/v2/persistent/public/default/conditions/stats
 {
   "msgRateIn": 368.3959382487755,
   "msgThroughputIn": 31002.792438576224,
@@ -34,6 +35,20 @@ Finally, check the topic stats via the Pulsar Admin REST Api at [admin/v2/persis
   ...
 ```
 
+The schema (here Avro)
+
+```json
+GET http://localhost:8080/admin/v2/schemas/public/default/conditions/schema
+{
+  "version": 0,
+  "type": "AVRO",
+  "timestamp": 0,
+  "data": "{\n \"name\": \"Condition\",\n \"type\": \"record\",\n \"fields\": [\n  {\n   \"name\": \"humidity\",\n   \"type\": [\n    \"null\",\n    \"float\"\n   ]\n  },\n  {\n   \"name\": \"temperature\",\n   \"type\": [\n    \"null\",\n    \"float\"\n   ]\n  }\n ]\n}",
+  "properties": {
+  }
+}
+```
+
 ## Notes
 
 ### Python
@@ -43,6 +58,10 @@ Since [pulsar-client](https://pypi.org/project/pulsar-client/) uses [manylinux](
 As of now, the most recent Python to use is 3.7. You may check at [pulsar-client/#files](https://pypi.org/project/pulsar-client/#files) for updates.
 
 So basically, we are using [python:3.7.6-slim-buster](https://hub.docker.com/layers/python/library/python/3.7.6-slim-buster/images/sha256-47cabc28176273541f261c4efd2a5d4d02262025f05ca0ed5df3680552f1c1bb) as a base image.
+
+### Java
+
+tbd
 
 ## References
 

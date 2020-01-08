@@ -53,6 +53,13 @@ services:
     <<: *python-client
     command: python3 consumer.py
 
+  java-producer:
+    <<: *java-client
+    command: java -DPULSAR_PRODUCER=true -jar app.jar
+
+  java-consumer:
+    <<: *java-client
+    
   # TODO: pulsar ui, cf.: 
   # - https://github.com/apache/pulsar-manager
   # - https://medium.com/streamnative/how-to-use-apache-pulsar-manager-with-herddb-dd265c955ca4

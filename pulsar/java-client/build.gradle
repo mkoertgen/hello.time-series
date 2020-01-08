@@ -1,0 +1,28 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version '5.2.0'
+    id 'io.freefair.lombok' version '4.1.6'
+}
+
+repositories {
+    jcenter()
+}
+
+def pulsarVersion = '2.4.2'
+
+dependencies {
+    implementation 'com.google.guava:guava:28.0-jre'
+    testImplementation 'junit:junit:4.12'
+    implementation "org.apache.pulsar:pulsar-client:${pulsarVersion}"
+}
+
+application {
+    mainClassName = 'com.examples.hello.pulsar.App'
+}
+
+shadowJar {
+  archivesBaseName = 'java-client'
+  archiveClassifier = ''
+  archiveVersion = ''
+}
