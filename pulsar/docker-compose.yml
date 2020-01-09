@@ -16,7 +16,7 @@ x-python-client: &python-client
   <<: *base
   # https://pulsar.apache.org/docs/en/standalone-docker/#consume-a-message
   build:
-    context: ./python-client
+    context: ./python
     #dockerfile: pulsar.Dockerfile
     args:
       #BASE_IMAGE: python:3.8.1-alpine3.11
@@ -31,7 +31,7 @@ x-java-client: &java-client
   <<: *base
   # https://pulsar.apache.org/docs/en/client-libraries/#java-client
   build:
-    context: ./java-client
+    context: ./java
   environment:
     PULSAR_HOST: pulsar
     PULSAR_TOPIC: conditions
