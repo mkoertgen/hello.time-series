@@ -1,5 +1,6 @@
 version: '3.7'
 
+#-----------------------------------------------------------------------
 x-base: &base
   logging:
     driver: "json-file"
@@ -9,10 +10,11 @@ x-base: &base
   # https://docs.docker.com/compose/compose-file/#restart
   restart: ${DOCKER_RESTART:-unless-stopped}
 
-volumes:
-  pulsar_data: {}
+x-pulsar-env: &pulsar-env
+  PULSAR_HOST: pulsar
+  PULSAR_TOPIC: conditions
 
-x-python-client: &python-client
+x-python-base: &python-base
   <<: *base
   # https://pulsar.apache.org/docs/en/standalone-docker/#consume-a-message
   build:
@@ -24,18 +26,17 @@ x-python-client: &python-client
       #BASE_IMAGE: python:3.8.1-slim-buster
       BASE_IMAGE: python:3.7.6-slim-buster
   environment:
-    PULSAR_HOST: pulsar
-    PULSAR_TOPIC: conditions
+    <<: *pulsar-env
 
-x-java-client: &java-client
+x-java-base: &java-base
   <<: *base
   # https://pulsar.apache.org/docs/en/client-libraries/#java-client
   build:
     context: ./java
   environment:
-    PULSAR_HOST: pulsar
-    PULSAR_TOPIC: conditions
+    <<: *pulsar-env
   
+#-----------------------------------------------------------------------
 services:
   pulsar:
     <<: *base
@@ -45,24 +46,35 @@ services:
     volumes: [ 'pulsar_data:/pulsar/data' ]
     command: bin/pulsar standalone
 
-  python-producer:
-    <<: *python-client
-    command: python3 producer.py
-
-  python-consumer:
-    <<: *python-client
-    command: python3 consumer.py
-
-  java-producer:
-    <<: *java-client
-    command: java -DPULSAR_PRODUCER=true -jar app.jar
-
-  java-consumer:
-    <<: *java-client
-    
   # TODO: pulsar ui, cf.: 
   # - https://github.com/apache/pulsar-manager
   # - https://medium.com/streamnative/how-to-use-apache-pulsar-manager-with-herddb-dd265c955ca4
   # pulsar-manager:
   #   <<: *base
   #   image: apachepulsar/pulsar-manager:v0.1.0
+
+  #-----------------------------------------------
+  python-producer:
+    <<: *python-base
+    command: python3 producer.py
+
+  python-consumer:
+    <<: *python-base
+    command: python3 consumer.py
+
+  #----------------------
+  java-producer:
+    <<: *java-base
+    environment:
+      <<: *pulsar-env
+      APP_MODE: producer
+
+  java-consumer:
+    <<: *java-base
+    environment:
+      <<: *pulsar-env
+      APP_MODE: consumer
+
+#-----------------------------------------------------------------------
+volumes:
+  pulsar_data: {}

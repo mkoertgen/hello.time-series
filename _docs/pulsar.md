@@ -20,6 +20,8 @@ python-consumer_1  | Received condition: time=2020-01-07T21:49:19.093253 id=sens
 ...
 ```
 
+Same for the `java-consumer`.
+
 Finally, check the topic stats via the Pulsar Admin REST Api at [admin/v2/persistent/public/default/conditions/stats](http://localhost:8080/admin/v2/persistent/public/default/conditions/stats)
 
 ```json
@@ -62,6 +64,11 @@ So basically, we are using [python:3.7.6-slim-buster](https://hub.docker.com/lay
 ### Java
 
 tbd
+
+#### Links
+
+- [The Pulsar Java client](https://pulsar.apache.org/docs/en/client-libraries-java/)
+- [Get started with Pulsar Functions](https://pulsar.apache.org/docs/en/functions-quickstart/)
 
 ## References
 
