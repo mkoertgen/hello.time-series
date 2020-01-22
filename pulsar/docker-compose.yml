@@ -1,4 +1,4 @@
-version: '3.7'
+version: "3.7"
 
 #-----------------------------------------------------------------------
 x-base: &base
@@ -35,18 +35,18 @@ x-java-base: &java-base
     context: ./java
   environment:
     <<: *pulsar-env
-  
+
 #-----------------------------------------------------------------------
 services:
   pulsar:
     <<: *base
     # cf.: https://pulsar.apache.org/docs/en/standalone-docker/#start-pulsar-in-docker
-    image: apachepulsar/pulsar:2.4.2
-    ports: ['6650:6650', '8080:8080']
-    volumes: [ 'pulsar_data:/pulsar/data' ]
+    image: apachepulsar/pulsar:2.5.0
+    ports: ["6650:6650", "8080:8080"]
+    volumes: ["pulsar_data:/pulsar/data"]
     command: bin/pulsar standalone
 
-  # TODO: pulsar ui, cf.: 
+  # TODO: pulsar ui, cf.:
   # - https://github.com/apache/pulsar-manager
   # - https://medium.com/streamnative/how-to-use-apache-pulsar-manager-with-herddb-dd265c955ca4
   # pulsar-manager:
