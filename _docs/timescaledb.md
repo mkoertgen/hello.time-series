@@ -1,10 +1,10 @@
 # TimeScaleDB
 
-PoC on TimeScaleDb
+[TimeScaleDB](https://www.timescale.com/) is an open-source time-series SQL database optimized for fast ingest and complex queries. Packaged as a PostgreSQL extension.
 
 ## Setup
 
-Setup a timescaledb instance
+Setup a single timescaledb instance
 
 ```bash
 $cd timescaledb

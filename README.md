@@ -1,4 +1,4 @@
-# hello.tick-stack
+# hello.time-series
 
 Checking out various time-series dbs.
 

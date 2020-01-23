@@ -1,4 +1,4 @@
-# hello.tick-stack
+# InfluxDB (TICK)
 
 Checking out the [TICK-Stack](https://www.influxdata.com/time-series-platform/), i.e.
 
@@ -10,9 +10,12 @@ Checking out the [TICK-Stack](https://www.influxdata.com/time-series-platform/),
 
 ![TICK-Stack](https://lh4.googleusercontent.com/kB1k79-NiJgt0bi0P-7n1n2HUUDITEMxeyS8lKHmgvpUZ_c0xzLeUBgvp91JTM_wWpJ3VjZAHlE-PbivjBqVZeZJNQbtQPtKCgmfD3AVgcGhya1cFoFHZgvYCQezxv4uBcWGOGxU)
 
+**NOTE:** InfluxDB is popular for seamless scale-out. However, once clustering you are going commercial.
+
 ## Usage
 
 ```console
+cd tick
 docker-compose up -d chronograf
 ```
 
