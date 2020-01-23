@@ -10,6 +10,7 @@ Reviewed Stacks around Time-Series DBs
 - [KairosDB](kairosdb)
 - [Scylla](scylladb)
 - [CrateDB](cratedb)
+- [Cassandra](cassandra)
 
 ## References
 
