@@ -18,7 +18,24 @@ Next, check Kibana at [localhost:5601](http://localhost:5601)
 - [What is the ELK Stack?](https://www.elastic.co/what-is/elk-stack)
 - [Elasticsearch as a Time Series Data Store](https://www.elastic.co/blog/elasticsearch-as-a-time-series-data-store)
 
-## Converting CSV to ndjson
+## Import CSV
+
+### ELK File Data Visualizer
+
+You will need to split large CSV into chunks of `< 100MB`, e.g. using [split](https://ss64.com/bash/split.html)
+
+```bash
+split -l 100000 source.csv dest -d --additional-suffix=.csv
+```
+
+Next, upload a chunk to [Kibana / Machine Learning / Data Visualizer](http://localhost:5601/app/ml#/filedatavisualizer?_g=())
+
+See
+
+- [Importing CSV and Log Data into Elasticsearch with File Data Visualizer](https://www.elastic.co/blog/importing-csv-and-log-data-into-elasticsearch-with-file-data-visualizer)
+- Stack Overflow: [Batch file to split .csv file](https://stackoverflow.com/a/23696118/2592915)
+
+### Converting CSV to ndjson
 
 Using
 
