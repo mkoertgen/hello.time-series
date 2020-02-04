@@ -178,6 +178,10 @@ See also
 - [Scaling out using Distributed Hypertables](https://docs.timescale.com/clustering/getting-started/scaling-out)
 - [timescale/timescaledb-kubernetes](https://github.com/timescale/timescaledb-kubernetes)
 
+### Long-Term Storage
+
+- timescale Blog (01/2020): [How to proactively manage long-term data storage with downsampling](https://blog.timescale.com/blog/how-to-proactively-manage-long-term-data-storage-with-downsampling/)
+
 ### .NET
 
 - [Entity Framework Core / Npgsql](https://www.npgsql.org/efcore/)

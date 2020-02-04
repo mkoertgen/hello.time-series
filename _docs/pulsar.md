@@ -80,3 +80,8 @@ tbd
 
 - [apache/pulsar-manager](https://github.com/apache/pulsar-manager)
 - [How to use Apache Pulsar Manager with HerdDB](https://medium.com/streamnative/how-to-use-apache-pulsar-manager-with-herddb-dd265c955ca4)
+
+### Deployment
+
+- [Deploying Pulsar on Kubernetes](https://pulsar.apache.org/docs/en/deploy-kubernetes/)
+- [How to Deploy Apache Pulsar Cluster in Kubernetes](https://www.syscrest.com/2019/09/installing-pulsar-on-kubernetes-using-helm/)
