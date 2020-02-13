@@ -28,9 +28,23 @@ services:
     ports: ['5601:5601']
     depends_on: ['elasticsearch']
 
+  logstash:
+    <<: *base
+    image: docker.elastic.co/logstash/logstash:${ELK_VERSION}
+    depends_on: ['elasticsearch']
+    environment:
+      CSV_DATA: ${CSV_DATA}
+    # https://www.elastic.co/guide/en/logstash/current/docker-config.html
+    volumes:
+      #- ./logstash/:/tmp/logstash/
+      - ./logstash/pipeline/:/usr/share/logstash/pipeline/
+      - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml
+      - ./logstash/data/csv/:${CSV_DATA}
+
   filebeat:
     <<: *base
     image: docker.elastic.co/beats/filebeat:${ELK_VERSION}
+    depends_on: ['elasticsearch']
     environment:
       ELASTICSEARCH_HOSTS: ${ELASTICSEARCH_HOSTS:-elasticsearch:9200}
       KIBANA_HOST: ${KIBANA_HOST:-kibana:5601}
