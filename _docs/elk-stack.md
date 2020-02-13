@@ -20,6 +20,15 @@ Next, check Kibana at [localhost:5601](http://localhost:5601)
 
 ## Import CSV
 
+### Logstash
+
+Most straight forward way is to import CSV via logstash, i.e.
+
+1. Download Weather [Sample Datasets](https://docs.timescale.com/latest/tutorials/other-sample-datasets)
+2. Put `weather_small_conditions.csv` into `./logstash/data/csv`
+3. Startup logstash (`docker-compose up -d logstash`)
+4. Import Kibana dashboards (`./kibana/export_weather.ndjson`)
+
 ### ELK File Data Visualizer
 
 You will need to split large CSV into chunks of `< 100MB`, e.g. using [split](https://ss64.com/bash/split.html)
