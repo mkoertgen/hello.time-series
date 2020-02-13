@@ -2,4 +2,4 @@
 
 Checking out various time-series dbs.
 
-How to proceed? Check the documentation at [_docs/index](_docs/index).
+How to proceed? Check the documentation at [_docs/index](_docs/index.md).

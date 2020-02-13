@@ -18,6 +18,10 @@ x-base-timescaledb: &timescaledb-base
   image: timescale/timescaledb:1.5.1-pg11-oss
 
 #---------------------------------------------------------------------------
+volumes:
+  timescaledb: {}
+
+#---------------------------------------------------------------------------
 services:
   timescaledb:
     <<: *timescaledb-base
@@ -48,6 +52,3 @@ services:
     environment:
       # cf.: https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/?view=aspnetcore-2.2#environment-variables-configuration-provider
       CUSTOMCONNSTR_WEATHERCONTEXT: "User ID =postgres;Password=${PG_PASSWORD};Server=timescaledb;Port=5432;Database=weatherDb;Integrated Security=true;Pooling=true;"
-  
-volumes:
-  timescaledb: {}

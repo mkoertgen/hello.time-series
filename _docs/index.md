@@ -2,15 +2,15 @@
 
 Reviewed Stacks around Time-Series DBs
 
-- [InfluxDB (TICK)](influx)
-- [TimeScaleDB](timescaledb)
-- [Grafana](grafana)
-- [ELK Stack](elk-stack)
-- Event Streaming: [Kafka](kafka), [Pulsar](pulsar)
-- [KairosDB](kairosdb)
-- [Scylla](scylladb)
-- [CrateDB](cratedb)
-- [Cassandra](cassandra)
+- [InfluxDB (TICK)](influx.md)
+- [TimeScaleDB](timescaledb.md)
+- [ELK Stack](elk-stack.md)
+- Event Streaming: [Kafka](kafka.md), [Pulsar](pulsar.md)
+- Dashboarding: [Grafana](grafana.md), [Redash](redash.md)
+- [KairosDB](kairosdb.md)
+- [Scylla](scylladb.md)
+- [CrateDB](cratedb.md)
+- [Cassandra](cassandra.md)
 
 ## References
 

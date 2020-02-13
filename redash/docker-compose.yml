@@ -1,0 +1,78 @@
+version: '3.7'
+
+x-base: &base
+  logging:
+    driver: "json-file"
+    options:
+      max-size: "3m"
+      max-file: "1"
+  # https://docs.docker.com/compose/compose-file/#restart
+  restart: ${DOCKER_RESTART:-unless-stopped}
+
+x-redash-service: &redash-service
+  <<: *base
+  image: redash/redash:latest
+  depends_on:
+    - postgres
+    - redis
+  #env_file: /opt/redash/env
+
+x-redash-env: &redash-env
+  # https://github.com/getredash/setup/blob/master/setup.sh#L49
+  REDASH_REDIS_URL: redis://redis:6379/0
+  REDASH_DATABASE_URL: "postgresql://postgres:${POSTGRES_PASSWORD}@postgres/postgres"
+
+#---------------------------------------------------------------------------
+volumes:
+  postgres: {}
+
+services:
+  server:
+    <<: *redash-service
+    command: server
+    ports: [ "5000:5000" ]
+    environment:
+      <<: *redash-env
+      REDASH_WEB_WORKERS: 4
+  scheduler:
+    <<: *redash-service
+    command: scheduler
+    environment:
+      <<: *redash-env
+      QUEUES: "celery"
+      WORKERS_COUNT: 1
+  scheduled_worker:
+    <<: *redash-service
+    command: worker
+    environment:
+      <<: *redash-env
+      QUEUES: "scheduled_queries,schemas"
+      WORKERS_COUNT: 1
+  adhoc_worker:
+    <<: *redash-service
+    command: worker
+    environment:
+      <<: *redash-env
+      QUEUES: "queries"
+      WORKERS_COUNT: 2
+
+  #-------------------------
+  redis:
+    <<: *base
+    image: redis:5.0.7-alpine
+  postgres:
+    <<: *base
+    image: postgres:12.1-alpine
+    #env_file: /opt/redash/env
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes: [ 'postgres:/var/lib/postgresql/data' ]
+
+  nginx:
+    <<: *base
+    image: redash/nginx:latest
+    ports: [ "8080:80" ]
+    depends_on:
+      - server
+    links:
+      - server:redash
