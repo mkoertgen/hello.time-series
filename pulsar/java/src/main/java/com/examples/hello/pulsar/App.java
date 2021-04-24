@@ -3,34 +3,38 @@
  */
 package com.examples.hello.pulsar;
 
+import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.apache.pulsar.client.api.PulsarClient;
 import org.apache.pulsar.client.api.PulsarClientException;
 import org.apache.pulsar.client.impl.schema.AvroSchema;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.time.Instant;
 import java.util.Optional;
 import java.util.Random;
 
+@Slf4j
 public class App {
-    private static final Logger logger = LoggerFactory.getLogger(App.class);
-    private static boolean shuttingDown = false;
+  private static boolean shuttingDown = false;
 
-    private static String PULSAR_HOST = getProp("PULSAR_HOST", "localhost");
-    private static String PULSAR_TOPIC = getProp("PULSAR_TOPIC", "conditions");
-    private enum AppMode { consumer, producer, function }
-    private static AppMode APP_MODE = AppMode.valueOf(getProp("APP_MODE", AppMode.function.toString()));
+  private static final String PULSAR_HOST = getProp("PULSAR_HOST", "localhost");
+  private static final String PULSAR_TOPIC = getProp("PULSAR_TOPIC", "conditions");
+  private static final AppMode APP_MODE = AppMode.valueOf(getProp("APP_MODE", AppMode.function.toString()));
 
-    public static void main(String[] args) throws PulsarClientException, InterruptedException {
-      addShutdownHook();
+  public static void main(String[] args) throws PulsarClientException, InterruptedException {
+    addShutdownHook();
 
-      switch(APP_MODE) {
-        case consumer: consume(); break;
-        case producer: produce(); break;
-        case function: break;
-      }
+    switch (APP_MODE) {
+      case consumer:
+        consume();
+        break;
+      case producer:
+        produce();
+        break;
+      case function:
+        break;
     }
+  }
 
   private static void addShutdownHook() {
     Runtime.getRuntime().addShutdownHook(new Thread(() -> {
@@ -46,64 +50,65 @@ public class App {
   }
 
   public static void consume() throws PulsarClientException {
-      var client = createClient(PULSAR_HOST);
-      var subscriptionName = getProp("PULSAR_SUBSCRIPTION_NAME", "my-java-sub");
-      var consumer = client.newConsumer(AvroSchema.of(Condition.class))
-        .topic(PULSAR_TOPIC)
-        .subscriptionName(subscriptionName)
-        .subscribe();
+    val client = createClient(PULSAR_HOST);
+    val subscriptionName = getProp("PULSAR_SUBSCRIPTION_NAME", "my-java-sub");
+    val consumer = client.newConsumer(AvroSchema.of(Condition.class))
+      .topic(PULSAR_TOPIC)
+      .subscriptionName(subscriptionName)
+      .subscribe();
 
-      while (!shuttingDown) {
-        var msg = consumer.receive();
-        try {
-          var condition = msg.getValue();
-          var ts = Instant.ofEpochMilli(msg.getPublishTime());
-          var id = msg.getMessageId();
-          var t = condition.getTemperature();
-          var h = condition.getHumidity();
-          logger.info("Received msg(time={} id={}), condition(T={} H={})", ts, id, t, h);
+    while (!shuttingDown) {
+      val msg = consumer.receive();
+      try {
+        val condition = msg.getValue();
+        val ts = Instant.ofEpochMilli(msg.getPublishTime());
+        val id = msg.getMessageId();
+        val t = condition.getTemperature();
+        val h = condition.getHumidity();
+        log.info("Received msg(time={} id={}), condition(T={} H={})", ts, id, t, h);
 
-          consumer.acknowledge(msg);
-        } catch (Exception e) {
-          logger.error("Could not receive message", e);
-          consumer.negativeAcknowledge(msg);
-        }
+        consumer.acknowledge(msg);
+      } catch (Exception e) {
+        log.error("Could not receive message", e);
+        consumer.negativeAcknowledge(msg);
       }
-      client.close();
     }
+    client.close();
+  }
 
-    public static void produce() throws PulsarClientException, InterruptedException {
-      var client = createClient(PULSAR_HOST);
-      var producer = client.newProducer(AvroSchema.of(Condition.class))
-        .topic(PULSAR_TOPIC)
-        .create();
-      var condition = new Condition();
-      var rnd = new Random();
-      var sleepMs = Integer.parseInt(getProp("PULSAR_INTERVAL_MS", "0"));
-      while (!shuttingDown) {
-        var t = rnd.nextFloat() * 40;
-        var h = rnd.nextFloat() * 100;
-        condition.setTemperature(t);
-        condition.setHumidity(h);
-        producer.send(condition);
-        logger.info("Sent condition(T={} H={})", t, h);
-        if (sleepMs > 0)
-          Thread.sleep(sleepMs);
-      }
-      client.close();
+  public static void produce() throws PulsarClientException, InterruptedException {
+    val client = createClient(PULSAR_HOST);
+    val producer = client.newProducer(AvroSchema.of(Condition.class))
+      .topic(PULSAR_TOPIC)
+      .create();
+    val condition = new Condition();
+    val rnd = new Random();
+    val sleepMs = Integer.parseInt(getProp("PULSAR_INTERVAL_MS", "0"));
+    while (!shuttingDown) {
+      val t = rnd.nextFloat() * 40;
+      val h = rnd.nextFloat() * 100;
+      condition.setTemperature(t);
+      condition.setHumidity(h);
+      producer.send(condition);
+      log.info("Sent condition(T={} H={})", t, h);
+      if (sleepMs > 0)
+        Thread.sleep(sleepMs);
     }
+    client.close();
+  }
 
-    public static PulsarClient createClient(String pulsarHost) throws PulsarClientException {
-      var serviceUrl = String.format("pulsar://%s:6650", pulsarHost);
-      return PulsarClient.builder()
-        .serviceUrl(serviceUrl)
-        .build();
-    }
+  public static PulsarClient createClient(String pulsarHost) throws PulsarClientException {
+    val serviceUrl = String.format("pulsar://%s:6650", pulsarHost);
+    return PulsarClient.builder()
+      .serviceUrl(serviceUrl)
+      .build();
+  }
 
-    public static String getProp(String name, String defaultValue)
-    {
-      return Optional.ofNullable(System.getenv(name))
-          .orElse(System.getProperty(name, defaultValue));
-    }
+  public static String getProp(String name, String defaultValue) {
+    return Optional.ofNullable(System.getenv(name))
+      .orElse(System.getProperty(name, defaultValue));
+  }
+
+  private enum AppMode {consumer, producer, function}
 }
 

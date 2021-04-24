@@ -41,7 +41,7 @@ services:
   pulsar:
     <<: *base
     # cf.: https://pulsar.apache.org/docs/en/standalone-docker/#start-pulsar-in-docker
-    image: apachepulsar/pulsar:2.5.0
+    image: apachepulsar/pulsar:2.7.1
     ports: ["6650:6650", "8080:8080"]
     volumes: ["pulsar_data:/pulsar/data"]
     command: bin/pulsar standalone

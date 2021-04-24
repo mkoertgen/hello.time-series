@@ -1,7 +1,9 @@
 package com.examples.hello.pulsar;
 
+import lombok.val;
+import lombok.var;
 import org.apache.pulsar.functions.api.Context;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.nio.ByteBuffer;
 
@@ -9,7 +11,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class ExampleFunctionTest {
+class ExampleFunctionTest {
   // How to debug a function:
   // 1. unit test (see here)
   // 2. local runner, cf.: https://pulsar.apache.org/docs/en/functions-debug/#debug-with-localrun-mode
@@ -20,12 +22,12 @@ public class ExampleFunctionTest {
   public void testUpdatesState() {
     ExampleFunction func = new ExampleFunction();
 
-    var input = new Condition();
-    var expected = ExampleFunction.HIGH_TEMPERATURE + 2f;
+    val input = new Condition();
+    val expected = ExampleFunction.HIGH_TEMPERATURE + 2f;
     input.setTemperature(expected);
 
-    var context = mock(Context.class);
-    var state = ByteBuffer.allocate(4); // 4 = 1 float
+    val context = mock(Context.class);
+    val state = ByteBuffer.allocate(4); // 4 = 1 float
     state.asFloatBuffer().put(0, ExampleFunction.HIGH_TEMPERATURE);
     when(context.getState(ExampleFunction.MAX_TEMPERATURE_KEY)).thenReturn(state);
 
