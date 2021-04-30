@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package com.example.hello.pulsar;
+
+option go_package = "/";
+
+service EventService {
+  rpc Create (EventRequest) returns (EventResponse) {}
+  rpc Validate (EventRequest) returns (EventResponse) {}
+}
+
+//import "google/protobuf/timestamp.proto";
+message EventRequest {
+  optional string uuid = 1;
+  //google.protobuf.Timestamp timestamp = 1;
+  optional uint32 timestamp = 2;
+
+  Action action = 3;
+  Subject subject = 4;
+
+  repeated string tags = 5;
+}
+
+message EventResponse {
+  string uuid = 1;
+  repeated string errors = 2;
+}
+
+
+message Action {
+  // TODO: use oneof: https://developers.google.com/protocol-buffers/docs/proto3#oneof
+  string type = 1;
+}
+
+message Subject {
+  // TODO: use oneof: https://developers.google.com/protocol-buffers/docs/proto3#oneof
+  string type = 1;
+  string id = 2;
+}
