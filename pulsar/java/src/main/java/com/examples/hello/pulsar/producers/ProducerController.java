@@ -14,6 +14,6 @@ public class ProducerController extends ServiceController<ProducerRunnable> {
   @Named(PulsarExecutors.PRODUCER)
   @Getter @Inject
   ExecutorService executor;
-  @Getter @Inject
+  @Getter @Inject @Named(ProducerFactory.BATCH_CONDITIONS)
   ProducerRunnable service;
 }

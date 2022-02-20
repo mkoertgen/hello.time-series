@@ -40,6 +40,7 @@ pulsar:
     name: random-producer
     topic: conditions
     interval: PT0S
+    batch: 100
   consumer:
     name: java
     topic: conditions

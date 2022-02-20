@@ -1,4 +1,4 @@
-package com.examples.hello.pulsar.consumers;
+package com.examples.hello.pulsar.consumers.batch;
 
 import com.examples.hello.pulsar.PulsarExecutors;
 import com.examples.hello.pulsar.ServiceController;

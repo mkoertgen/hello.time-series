@@ -1,6 +1,9 @@
 package com.examples.hello.pulsar.consumers;
 
-import com.examples.hello.pulsar.Condition;
+import com.examples.hello.pulsar.weather.conditions.Condition;
+import com.examples.hello.pulsar.consumers.batch.BatchConsumerRunnable;
+import com.examples.hello.pulsar.consumers.batch.BatchConsumerRunner;
+import com.examples.hello.pulsar.consumers.batch.ConditionBatchConsumer;
 import com.examples.hello.pulsar.services.PulsarFactory;
 import io.micronaut.context.annotation.Factory;
 import io.micronaut.context.annotation.Value;
@@ -32,14 +35,11 @@ public class ConsumerFactory {
     return new BatchConsumerRunner<>(consumer, batchSink());
   }
 
-
-  @Singleton
-  public ConditionSink sink() {
+  private ConditionConsumer sink() {
     return msg -> log.debug("Received condition={}", msg.getValue());
   }
 
-  @Singleton
-  public BatchConditionSink batchSink() {
+  private ConditionBatchConsumer batchSink() {
     return msg -> log.debug("Received conditions batch (size={})", msg.size());
   }
 }

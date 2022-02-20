@@ -1,4 +1,4 @@
-package com.examples.hello.pulsar;
+package com.examples.hello.pulsar.weather.conditions;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

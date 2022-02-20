@@ -1,6 +1,7 @@
 package com.examples.hello.pulsar;
 
-import com.examples.hello.pulsar.functions.ExampleFunction;
+import com.examples.hello.pulsar.functions.FilterTemperatureFunction;
+import com.examples.hello.pulsar.weather.conditions.Condition;
 import lombok.val;
 import org.apache.pulsar.functions.api.Context;
 import org.junit.jupiter.api.Test;
@@ -20,16 +21,16 @@ class ExampleFunctionTest {
 
   @Test
   public void testUpdatesState() {
-    ExampleFunction func = new ExampleFunction();
+    FilterTemperatureFunction func = new FilterTemperatureFunction();
 
     val input = Condition.builder().build();
-    val expected = ExampleFunction.HIGH_TEMPERATURE + 2f;
+    val expected = FilterTemperatureFunction.HIGH_TEMPERATURE + 2f;
     input.setTemperature(expected);
 
     val context = mock(Context.class);
     val state = ByteBuffer.allocate(4); // 4 = 1 float
-    state.asFloatBuffer().put(0, ExampleFunction.HIGH_TEMPERATURE);
-    when(context.getState(ExampleFunction.MAX_TEMPERATURE_KEY)).thenReturn(state);
+    state.asFloatBuffer().put(0, FilterTemperatureFunction.HIGH_TEMPERATURE);
+    when(context.getState(FilterTemperatureFunction.MAX_TEMPERATURE_KEY)).thenReturn(state);
 
     var output = func.process(input, context);
 
@@ -39,7 +40,7 @@ class ExampleFunctionTest {
     assertThat(output).isEqualTo(expected);
 
     // 2. Does not update when below max
-    input.setTemperature(ExampleFunction.HIGH_TEMPERATURE);
+    input.setTemperature(FilterTemperatureFunction.HIGH_TEMPERATURE);
     output = func.process(input, context);
     assertThat(state.asFloatBuffer().get(0)).isEqualTo(expected);
     assertThat(output).isNull();

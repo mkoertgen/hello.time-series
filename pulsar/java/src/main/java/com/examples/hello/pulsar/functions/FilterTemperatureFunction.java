@@ -1,13 +1,13 @@
 package com.examples.hello.pulsar.functions;
 
-import com.examples.hello.pulsar.Condition;
+import com.examples.hello.pulsar.weather.conditions.Condition;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.pulsar.functions.api.Context;
 import org.apache.pulsar.functions.api.Function;
 
 @Slf4j
-public class ExampleFunction implements Function<Condition, Float> {
+public class FilterTemperatureFunction implements Function<Condition, Float> {
   public static final String MAX_TEMPERATURE_KEY = "maxTemperature";
   public static final float HIGH_TEMPERATURE = 40f;
 
@@ -20,7 +20,6 @@ public class ExampleFunction implements Function<Condition, Float> {
     if (currTemp > state.get(0)) {
       state.put(0, currTemp);
 
-      // publish to log topic, cf.: https://pulsar.apache.org/docs/en/functions-debug/#use-log-topic
       log.debug("Updated max temperature to {}", currTemp);
     }
 

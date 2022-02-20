@@ -1,6 +1,6 @@
 package com.examples.hello.pulsar.functions;
 
-import com.examples.hello.pulsar.Condition;
+import com.examples.hello.pulsar.weather.conditions.Condition;
 import com.examples.hello.pulsar.services.PulsarFactory;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micronaut.context.annotation.Factory;
@@ -31,15 +31,14 @@ public class FunctionFactory {
   public FunctionRunnable service() {
     return FunctionRunner.<Condition, Float>builder()
       .consumer(factory.consumerOf(name, input, Condition.class))
-      .function(new ExampleFunction())
+      .function(new FilterTemperatureFunction())
       .producer(factory.producerOf(name, output, Float.class))
       .context(context())
       .build();
   }
 
   @SneakyThrows
-  @Singleton
-  public Context context() {
+  private Context context() {
     return SimpleFunctionContext.builder()
       .tenant(factory.getTenant())
       .namespace(factory.getNamespace())

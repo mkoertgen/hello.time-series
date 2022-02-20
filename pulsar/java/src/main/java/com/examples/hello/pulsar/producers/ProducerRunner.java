@@ -10,20 +10,20 @@ import org.apache.pulsar.client.api.Producer;
 @Slf4j
 @RequiredArgsConstructor
 public class ProducerRunner<T> extends PulsarRunner implements ProducerRunnable {
-  private final Producer<T> producer;
-  private final MessageProducer<T> source;
+    private final Producer<T> producer;
+    private final MessageProducer<T> source;
 
-  @SneakyThrows
-  @Override
-  protected void callOnce() {
-    val value = source.call();
-    val id = producer.send(value);
-    log.debug("Sent value={}, id={})", value, id);
-  }
+    @SneakyThrows
+    @Override
+    protected void callOnce() {
+        val value = source.call();
+        val id = producer.send(value);
+        log.debug("Produced value={}, id={})", value, id);
+    }
 
-  @Override
-  public void close() throws Exception {
-    producer.close();
-  }
+    @Override
+    public void close() throws Exception {
+        producer.close();
+    }
 }
 

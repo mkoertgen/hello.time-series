@@ -23,11 +23,15 @@ public class FunctionRunner<I, O> extends PulsarRunner implements FunctionRunnab
     log.debug("Received msg(time={} id={})", msg.getEventTime(), msg.getMessageId());
 
     val input = msg.getValue();
-    val output = function.process(input, context);
-    log.debug("Processed msg(time={} id={}), input={}, output={})", msg.getEventTime(), msg.getMessageId(), input, output);
+    if (input != null) {
+      val output = function.process(input, context);
+      log.debug("Processed msg(time={} id={}), input={}, output={})", msg.getEventTime(), msg.getMessageId(), input, output);
 
-    val id = producer.send(output);
-    log.debug("Sent msg(id={})", id);
+      if (output != null) {
+        val id = producer.send(output);
+        log.debug("Sent msg(id={})", id);
+      }
+    }
 
     consumer.acknowledge(msg);
   }

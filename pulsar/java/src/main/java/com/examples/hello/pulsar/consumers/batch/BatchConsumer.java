@@ -1,4 +1,4 @@
-package com.examples.hello.pulsar.consumers;
+package com.examples.hello.pulsar.consumers.batch;
 
 import org.apache.pulsar.client.api.Message;
 

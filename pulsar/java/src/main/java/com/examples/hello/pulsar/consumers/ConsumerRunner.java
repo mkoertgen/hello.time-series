@@ -7,9 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.pulsar.client.api.Consumer;
 
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
 @Slf4j
 @RequiredArgsConstructor
 public class ConsumerRunner<T> extends PulsarRunner implements ConsumerRunnable {
