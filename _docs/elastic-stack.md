@@ -1,17 +1,17 @@
-# ELK stack
+# Elastic stack
 
 ## Usage
 
 Start the stack using
 
 ```console
-cd elk
+cd elastic
 docker-compose up -d
 ```
 
 Next, check Kibana at [localhost:5601](http://localhost:5601)
 
-![kibana](img/elk/kibana.jpg)
+![kibana](img/elastic/kibana.jpg)
 
 ## References
 
@@ -29,7 +29,7 @@ Most straight forward way is to import CSV via logstash, i.e.
 3. Startup logstash (`docker-compose up -d logstash`)
 4. Import Kibana dashboards (`./kibana/export_weather.ndjson`)
 
-### ELK File Data Visualizer
+### File Data Visualizer
 
 You will need to split large CSV into chunks of `< 100MB`, e.g. using [split](https://ss64.com/bash/split.html)
 
@@ -37,7 +37,7 @@ You will need to split large CSV into chunks of `< 100MB`, e.g. using [split](ht
 split -l 100000 source.csv dest -d --additional-suffix=.csv
 ```
 
-Next, upload a chunk to [Kibana / Machine Learning / Data Visualizer](http://localhost:5601/app/ml#/filedatavisualizer?_g=())
+Next, upload a chunk to [Kibana / Machine Learning / Data Visualizer](<http://localhost:5601/app/ml#/filedatavisualizer?_g=()>)
 
 See
 

@@ -4,7 +4,7 @@ Reviewed Stacks around Time-Series DBs
 
 - [InfluxDB (TICK)](influx.md)
 - [TimeScaleDB](timescaledb.md)
-- [ELK Stack](elk-stack.md)
+- [Elastic Stack](elastic-stack.md)
 - Event Streaming: [Kafka](kafka.md), [Pulsar](pulsar.md)
 - Dashboarding: [Grafana](grafana.md), [Redash](redash.md)
 - [KairosDB](kairosdb.md)
