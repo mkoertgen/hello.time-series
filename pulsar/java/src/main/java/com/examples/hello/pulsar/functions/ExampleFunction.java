@@ -1,5 +1,6 @@
-package com.examples.hello.pulsar;
+package com.examples.hello.pulsar.functions;
 
+import com.examples.hello.pulsar.Condition;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.pulsar.functions.api.Context;

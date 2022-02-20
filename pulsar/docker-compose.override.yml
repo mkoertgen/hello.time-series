@@ -1,0 +1,41 @@
+version: "3.7"
+
+services:
+  pulsar:
+    # Better to use k8s (local: mionikube, kind, ...)
+    # cf.: https://pulsar.apache.org/docs/en/standalone-docker/#start-pulsar-in-docker
+    image: apachepulsar/pulsar:${PULSAR_VERSION:-2.9.1}
+    ports: ["6650:6650", "8080:8080"]
+    volumes: ["pulsar_data:/pulsar/data"]
+    command: bin/pulsar standalone
+
+  pulsar-manager: # https://pulsar.apache.org/docs/en/administration-pulsar-manager/#set-administrator-account-and-password
+    image: apachepulsar/pulsar-manager:v0.2.0
+    ports: ["9527:9527", "7750:7750"] # https://stackoverflow.com/a/71052130/2592915
+    environment:
+      USERNAME: pulsar
+      PASSWORD: pulsar
+      PULSAR_CLUSTER: pulsar
+      DRIVER_CLASS_NAME: org.postgresql.Driver
+      LOG_LEVEL: DEBUG
+      REDIRECT_HOST: http://127.0.0.1
+      REDIRECT_PORT: 9527
+      URL: jdbc:postgresql://127.0.0.1:5432/pulsar_manager
+      SPRING_CONFIGURATION_FILE: /pulsar-manager/pulsar-manager/application.properties
+    volumes: ["pulsar_manager_data:/pulsar-manager/pulsar-manager/dbdata"]
+
+  pulsar-manager-set-super-user:
+    # HACK for https://github.com/apache/pulsar-helm-chart/issues/108#issuecomment-1046001952
+    image: radial/busyboxplus:curl
+    environment:
+      URL: http://pulsar-manager:7750
+      USERNAME: pulsar
+      PASSWORD: pulsar
+    volumes: ["./pulsar-manager/:/dev/config"]
+    command: /dev/config/set-super-user.sh
+    depends_on: ["pulsar-manager"]
+
+#-----------------------------------------------------------------------
+volumes:
+  pulsar_data: {}
+  pulsar_manager_data: {}

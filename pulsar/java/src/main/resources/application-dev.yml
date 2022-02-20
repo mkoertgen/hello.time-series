@@ -1,0 +1,6 @@
+pulsar:
+  namespace: dev
+
+logger:
+  levels:
+    com.examples.hello.pulsar: DEBUG

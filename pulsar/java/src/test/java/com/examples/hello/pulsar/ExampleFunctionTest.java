@@ -1,7 +1,7 @@
 package com.examples.hello.pulsar;
 
+import com.examples.hello.pulsar.functions.ExampleFunction;
 import lombok.val;
-import lombok.var;
 import org.apache.pulsar.functions.api.Context;
 import org.junit.jupiter.api.Test;
 
@@ -22,7 +22,7 @@ class ExampleFunctionTest {
   public void testUpdatesState() {
     ExampleFunction func = new ExampleFunction();
 
-    val input = new Condition();
+    val input = Condition.builder().build();
     val expected = ExampleFunction.HIGH_TEMPERATURE + 2f;
     input.setTemperature(expected);
 

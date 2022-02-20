@@ -38,21 +38,6 @@ x-java-base: &java-base
 
 #-----------------------------------------------------------------------
 services:
-  pulsar:
-    <<: *base
-    # cf.: https://pulsar.apache.org/docs/en/standalone-docker/#start-pulsar-in-docker
-    image: apachepulsar/pulsar:2.7.1
-    ports: ["6650:6650", "8080:8080"]
-    volumes: ["pulsar_data:/pulsar/data"]
-    command: bin/pulsar standalone
-
-  # TODO: pulsar ui, cf.:
-  # - https://github.com/apache/pulsar-manager
-  # - https://medium.com/streamnative/how-to-use-apache-pulsar-manager-with-herddb-dd265c955ca4
-  # pulsar-manager:
-  #   <<: *base
-  #   image: apachepulsar/pulsar-manager:v0.1.0
-
   #-----------------------------------------------
   python-producer:
     <<: *python-base
@@ -74,7 +59,3 @@ services:
     environment:
       <<: *pulsar-env
       APP_MODE: consumer
-
-#-----------------------------------------------------------------------
-volumes:
-  pulsar_data: {}
