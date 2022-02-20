@@ -1,4 +1,4 @@
-version: '3.7'
+version: "3.7"
 
 x-base: &base
   logging:
@@ -12,26 +12,26 @@ x-base: &base
 volumes:
   elastic_data: {}
   #filebeat_data: {}
-  
+
 services:
   elasticsearch:
     <<: *base
-    image: docker.elastic.co/elasticsearch/elasticsearch:${ELK_VERSION}
-    ports: ['9200:9200']
+    image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION}
+    ports: ["9200:9200"]
     environment:
       discovery.type: single-node
-    volumes: [ 'elastic_data:/usr/share/elasticsearch/data' ]
+    volumes: ["elastic_data:/usr/share/elasticsearch/data"]
 
   kibana:
     <<: *base
-    image: docker.elastic.co/kibana/kibana:${ELK_VERSION}
-    ports: ['5601:5601']
-    depends_on: ['elasticsearch']
+    image: docker.elastic.co/kibana/kibana:${ELASTIC_VERSION}
+    ports: ["5601:5601"]
+    depends_on: ["elasticsearch"]
 
   logstash:
     <<: *base
-    image: docker.elastic.co/logstash/logstash:${ELK_VERSION}
-    depends_on: ['elasticsearch']
+    image: docker.elastic.co/logstash/logstash:${ELASTIC_VERSION}
+    depends_on: ["elasticsearch"]
     environment:
       CSV_DATA: ${CSV_DATA}
     # https://www.elastic.co/guide/en/logstash/current/docker-config.html
@@ -43,12 +43,11 @@ services:
 
   filebeat:
     <<: *base
-    image: docker.elastic.co/beats/filebeat:${ELK_VERSION}
-    depends_on: ['elasticsearch']
+    image: docker.elastic.co/beats/filebeat:${ELASTIC_VERSION}
+    depends_on: ["elasticsearch"]
     environment:
       ELASTICSEARCH_HOSTS: ${ELASTICSEARCH_HOSTS:-elasticsearch:9200}
       KIBANA_HOST: ${KIBANA_HOST:-kibana:5601}
     volumes:
       - ./filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
       - ./filebeat/logs/:/usr/share/filebeat/logs/:ro
-  
