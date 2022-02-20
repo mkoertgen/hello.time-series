@@ -1,4 +1,4 @@
-version: '3.7'
+version: "3.7"
 
 #---------------------------------------------------------------------------
 x-base: &base
@@ -14,7 +14,7 @@ x-base: &base
 x-base-kafka: &kafka-base
   <<: *base
   # https://hub.docker.com/r/landoop/fast-data-dev/tags
-  image: landoop/fast-data-dev:2.3.0
+  image: landoop/fast-data-dev:2.6.2
 
 #---------------------------------------------------------------------------
 services:
@@ -23,22 +23,22 @@ services:
     environment:
       # https://github.com/Landoop/fast-data-dev/blob/master/README.md#customize-execution
       ADV_HOST: 127.0.0.1
-      RUNTESTS: 0                 # Disable Running tests so the cluster starts faster
+      RUNTESTS: 0 # Disable Running tests so the cluster starts faster
       SAMPLEDATA: 0
       CONNECT_HEAP: 1G
       DISABLE_JMX: 1
       # https://stackoverflow.com/a/36649296/2592915
       KAFKA_HEAP_OPTS: "-Xmx1G -Xms1G"
     ports:
-      - 2181:2181                 # Zookeeper
-      - 3030:3030                 # Landoop UI
-      - 8081-8083:8081-8083       # REST Proxy, Schema Registry, Kafka Connect ports
+      - 2181:2181 # Zookeeper
+      - 3030:3030 # Landoop UI
+      - 8081-8083:8081-8083 # REST Proxy, Schema Registry, Kafka Connect ports
       #- 9581-9585:9581-9585       # JMX Ports
-      - 9092:9092                 # Kafka Broker
+      - 9092:9092 # Kafka Broker
 
   # NOTE: place this last (due to networkmode=host!)
   kafka-cli:
     <<: *kafka-base
     command: bash
     network_mode: host
-    volumes: [ './:/tutorial/']
+    volumes: ["./:/tutorial/"]
