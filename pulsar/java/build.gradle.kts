@@ -2,7 +2,7 @@ plugins {
   id("io.freefair.lombok") version "6.4.0"
   //--- Packaging pulsar functions https://pulsar.apache.org/docs/en/functions-package/#java
   id("com.github.johnrengelman.shadow") version "7.1.2"
-  id("io.micronaut.application") version "3.2.1"
+  id("io.micronaut.application") version "3.6.0"
 }
 
 group = "com.examples.hello.pulsar"
@@ -23,12 +23,12 @@ dependencies {
   runtimeOnly("ch.qos.logback:logback-classic")
   implementation("io.micronaut:micronaut-validation")
 
-  testImplementation(platform("org.junit:junit-bom:5.8.2"))
+  testImplementation(platform("org.junit:junit-bom:5.9.0"))
   testImplementation("org.junit.jupiter:junit-jupiter")
-  testImplementation("org.mockito:mockito-core:4.3.1")
-  testImplementation("org.assertj:assertj-core:3.22.0")
+  testImplementation("org.mockito:mockito-core:4.8.0")
+  testImplementation("org.assertj:assertj-core:3.23.1")
 
-  val pulsarVersion = "2.9.1"
+  val pulsarVersion = "2.10.1"
   implementation("org.apache.pulsar:pulsar-client:${pulsarVersion}")
   implementation("org.apache.pulsar:pulsar-client-admin:${pulsarVersion}")
   implementation("org.apache.pulsar:pulsar-functions-api:${pulsarVersion}")
@@ -37,9 +37,9 @@ dependencies {
   testImplementation("org.apache.pulsar:pulsar-client-admin:${pulsarVersion}")
   testImplementation("org.apache.pulsar:pulsar-functions-api:${pulsarVersion}")
 
-  testImplementation("org.testcontainers:testcontainers:1.16.3")
-  testImplementation("org.testcontainers:junit-jupiter:1.16.3")
-  testImplementation("org.testcontainers:pulsar:1.16.3")
+  testImplementation("org.testcontainers:testcontainers:1.17.3")
+  testImplementation("org.testcontainers:junit-jupiter:1.17.3")
+  testImplementation("org.testcontainers:pulsar:1.17.3")
 }
 
 application {
