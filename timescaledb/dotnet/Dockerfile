@@ -1,7 +1,7 @@
 # https://hub.docker.com/_/microsoft-dotnet-core-aspnet/
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.1.0-alpine3.10 as base
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 as base
 
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1.100-alpine3.10 AS build
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 COPY . /src/
 WORKDIR /src/
 
