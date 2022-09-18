@@ -3,11 +3,9 @@ version: '3.7'
 # https://docs.docker.com/compose/networking/#use-a-pre-existing-network
 networks:
   timescaledb:
-    external:
-      name: timescaledb_default
+    name: timescaledb_default
   tick:
-    external:
-      name: tick_default
+    name: tick_default
     
 #---------------------------------------------------------------------------
 x-base: &base
@@ -63,12 +61,12 @@ services:
   #--- MQTT brokers (choose one -> `.env`-file)
   mosquitto: # preferred, bc. very lightweight
     <<: *base
-    image: eclipse-mosquitto:1.6.8
+    image: eclipse-mosquitto:2.0.15
     ports: [ '1883:1883' ]
   
   rabbitmq: # preferred mqtt broker, bc. very interoperabel (polyglot broker translates well to message protocols)
     <<: *base
-    image: rabbitmq:3.8.2-management-alpine
+    image: rabbitmq:3.10.7-management-alpine
     ports: 
       - 5672:5672   # rabbitmq tcp listener
       - 15672:15672 # rabbitmq ui
@@ -78,5 +76,5 @@ services:
     volumes:
       - ./rabbitmq/conf/enabled_plugins:/etc/rabbitmq/enabled_plugins
     environment:
-      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
