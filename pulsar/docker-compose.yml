@@ -21,10 +21,7 @@ x-python-base: &python-base
     context: ./python
     #dockerfile: pulsar.Dockerfile
     args:
-      #BASE_IMAGE: python:3.8.1-alpine3.11
-      #BASE_IMAGE: apachepulsar/pulsar:2.4.2
-      #BASE_IMAGE: python:3.8.1-slim-buster
-      BASE_IMAGE: python:3.7.6-slim-buster
+      BASE_IMAGE: python:3.10.7-slim-bullseye
   environment:
     <<: *pulsar-env
 
@@ -59,3 +56,8 @@ services:
     environment:
       <<: *pulsar-env
       APP_MODE: consumer
+
+  kotlin-function:
+    build:
+      context: ./kotlin
+

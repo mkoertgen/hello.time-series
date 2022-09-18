@@ -1,0 +1,59 @@
+logger:
+  levels:
+    root: INFO
+
+micronaut:
+  server:
+    port: 8081 # 8080 already used by pulsar
+
+  application:
+    name: hello.pulsar
+
+  # https://micronaut-projects.github.io/micronaut-micrometer/latest/guide/#metricsAndReportersPrometheus
+  metrics:
+    enabled: true
+    export:
+      prometheus:
+        enabled: true
+        step: PT1M
+        descriptions: true
+
+  router:
+    static-resources:
+      swagger:
+        paths: classpath:META-INF/swagger
+        mapping: /swagger/**
+      swagger-ui:
+        paths: classpath:META-INF/swagger/views/swagger-ui
+        mapping: /swagger-ui/**
+
+netty:
+  default:
+    allocator:
+      max-order: 3
+
+endpoints:
+  prometheus:
+    sensitive: false
+
+pulsar:
+  client:
+    url: pulsar://localhost:6650
+  admin:
+    url: http://localhost:8080
+  tenant: public
+  namespace: dev
+  topics:
+    partitions: -1
+  producer:
+    name: random-producer
+    topic: conditions
+    interval: PT0.1S
+    batch: 100
+  consumer:
+    name: kotlin-consumer
+    topic: conditions
+  function:
+    name: filter-temperature
+    input: conditions
+    output: temperatures

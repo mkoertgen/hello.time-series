@@ -1,12 +1,13 @@
-package com.example.hello.pulsar
+package com.example.hello.pulsar.functions
 
+import com.example.hello.pulsar.Condition
 import org.apache.pulsar.functions.api.Context
 import org.apache.pulsar.functions.api.Function
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-class ExampleFunction : Function<Condition, Float> {
-  private val log: Logger = LoggerFactory.getLogger(ExampleFunction::class.java)
+class FilterTemperatureFunction : Function<Condition, Float> {
+  private val log: Logger = LoggerFactory.getLogger(FilterTemperatureFunction::class.java)
   private val maxTemperatureKey = "maxTemperature"
   private val highTemperature = 40f
 
@@ -26,3 +27,4 @@ class ExampleFunction : Function<Condition, Float> {
     return if (currTemp > highTemperature) currTemp else null
   }
 }
+

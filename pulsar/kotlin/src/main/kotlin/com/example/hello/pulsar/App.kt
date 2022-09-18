@@ -7,27 +7,27 @@ import org.slf4j.LoggerFactory
 import java.time.Instant
 import kotlin.random.Random
 
+
+@Deprecated("Use Micronaut Application  instead")
 class App {
   private val log: Logger = LoggerFactory.getLogger(App::class.java)
   private val pulsarHost = getProp("PULSAR_HOST", "localhost")
   private val topic = getProp("PULSAR_TOPIC", "conditions")
-  private val appMode = AppMode.valueOf(getProp("APP_MODE", AppMode.function.toString()))
+  private val appMode = AppMode.valueOf(getProp("APP_MODE", AppMode.Function.toString()))
 
   fun main() {
     addShutdownHook()
 
     when (appMode) {
-      AppMode.consumer -> consume()
-      AppMode.producer -> produce()
+      AppMode.Consumer -> consume()
+      AppMode.Producer -> produce()
       else -> return
     }
   }
 
-  private enum class AppMode {
-    consumer, producer, function
-  }
+  private enum class AppMode { Consumer, Producer, Function }
 
-  fun consume() {
+  private fun consume() {
     val client = createClient()
     val subscriptionName = getProp("PULSAR_SUBSCRIPTION_NAME", "my-java-sub")
     val consumer = client
@@ -39,9 +39,9 @@ class App {
     while (!shuttingDown) {
       val msg = consumer.receive()
       try {
-        val condition = msg.getValue()
-        val ts = Instant.ofEpochMilli(msg.getPublishTime())
-        val id = msg.getMessageId()
+        val condition = msg.value
+        val ts = Instant.ofEpochMilli(msg.publishTime)
+        val id = msg.messageId
         val t = condition.temperature
         val h = condition.humidity
         log.info("Received msg(time={} id={}), condition(T={} H={})", ts, id, t, h)
@@ -54,7 +54,7 @@ class App {
     client.close()
   }
 
-  fun produce() {
+  private fun produce() {
     val client = createClient()
     val producer = client
       .newProducer(AvroSchema.of(Condition::class.java))
@@ -84,12 +84,12 @@ class App {
     return System.getenv(name) ?: System.getProperty(name, defaultValue)
   }
 
-  var shuttingDown = false
+  private var shuttingDown = false
   private fun addShutdownHook() {
     Runtime.getRuntime().addShutdownHook(Thread {
       try {
         Thread.sleep(200)
-        System.out.println("Shutting down ...")
+        println("Shutting down ...")
         shuttingDown = true
       } catch (e: InterruptedException) {
         Thread.currentThread().interrupt()
